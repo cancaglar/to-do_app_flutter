@@ -1,5 +1,5 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:todoapp/toDoPage.dart';
 
 void main() {
   runApp(HomePage());
@@ -10,11 +10,10 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Container(
-          child: Text("Hello world"),
-        ),
+    return MaterialApp(
+      color: Colors.white,
+      home: Scaffold(
+        body: TodoPage(),
       ),
     );
   }
