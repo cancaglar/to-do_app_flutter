@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todoapp/sharedPrefs.dart';
 
 import 'constants.dart';
 
@@ -10,14 +11,25 @@ class MyListView extends StatefulWidget {
 }
 
 class _MyListViewState extends State<MyListView> {
+  bool isListEmpty = true;
+  SharedPrefs prefs = SharedPrefs();
+  @override
+  void initState() {
+    super.initState();
+
+    // prefs.loadAllPages().getPages().isEmpty
+    //     ? isListEmpty = true
+    //     : isListEmpty = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: EmptyContainer(true),
+      child: emptyContainer(isListEmpty),
     );
   }
 
-  Container EmptyContainer(bool isListEmpty) {
+  Container emptyContainer(bool isListEmpty) {
     if (isListEmpty == true) {
       return Container(
         alignment: Alignment.center,
@@ -33,12 +45,12 @@ class _MyListViewState extends State<MyListView> {
         ),
       );
     } else {
-      return ContainerList();
+      return containerList();
     }
   }
 }
 
-Container ContainerList() {
+Container containerList() {
   return Container(
     child: Text('List is not empty'),
   );
