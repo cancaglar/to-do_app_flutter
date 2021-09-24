@@ -23,6 +23,8 @@ class _TodoPageState extends State<TodoPage> {
   List<NotePages> notePages = [];
   final List<NotePages> pages = [];
 
+  bool addButtonVisibile = false;
+
   void getListDataFromStorage() {
     dropDownItemValue.clear();
     notePages.clear();
@@ -72,67 +74,154 @@ class _TodoPageState extends State<TodoPage> {
       child: Column(
         children: [
           MyTabBar(),
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(left: 3, top: 5),
-                  child: Row(children: [
-                    Ink(
-                      width: 152,
-                      height: 45,
-                      padding: EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black, width: 2),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: selectedValue,
-                          isExpanded: true,
-                          icon: Image.asset('assets/down-list-arrow.png'),
-                          iconSize: 10,
-                          elevation: 16,
-                          onChanged: (newValue) {
-                            //print(newValue);
-                            setState(() {
-                              selectedValue = newValue!;
+          Container(
+            margin: EdgeInsets.only(top: 3, right: 3, left: 3),
+            // color: Colors.grey,
+            child: Row(
+              children: [
+                Ink(
+                  width: 152,
+                  height: 45,
+                  padding: EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: selectedValue,
+                      isExpanded: true,
+                      icon: Image.asset('assets/down-list-arrow.png'),
+                      iconSize: 10,
+                      elevation: 16,
+                      onChanged: (newValue) {
+                        //print(newValue);
+                        setState(() {
+                          selectedValue = newValue!;
 
-                              if (selectedValue == 'Add Page') {
-                                Navigator.of(context)
-                                    .push(
-                                      new MaterialPageRoute(
-                                        //opaque: false,
+                          if (selectedValue == 'Add Page') {
+                            addButtonVisibile = false;
+                            Navigator.of(context)
+                                .push(
+                                  new MaterialPageRoute(
+                                    //opaque: false,
 
-                                        builder: (context) => AddPagePopUp(),
-                                      ),
-                                    )
-                                    .then((value) => () {
-                                          setState(() {
-                                            print('asd');
-                                          });
-                                        });
-                              }
-                              getListDataFromStorage();
-                            });
-                          },
-                          items: List.generate(
-                            dropDownItemValue.length,
-                            (index) => DropdownMenuItem(
-                                child: Text('${dropDownItemValue[index]}'),
-                                value: '${dropDownItemValue[index]}'),
-                          ),
-                        ),
+                                    builder: (context) => AddPagePopUp(),
+                                  ),
+                                )
+                                .then((value) => () {
+                                      setState(() {
+                                        print('asd');
+                                      });
+                                    });
+                          } else {
+                            addButtonVisibile = true;
+                          }
+                          getListDataFromStorage();
+                        });
+                      },
+                      items: List.generate(
+                        dropDownItemValue.length,
+                        (index) => DropdownMenuItem(
+                            child: Text('${dropDownItemValue[index]}'),
+                            value: '${dropDownItemValue[index]}'),
                       ),
                     ),
-                  ]),
+                  ),
                 ),
-              ),
-            ],
+                SizedBox(width: 18),
+                if (addButtonVisibile)
+                  Ink(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black, width: 3),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    height: 45,
+                    width: 45,
+                    child: TextButton(
+                      child: Image.asset('assets/plus-button.png'),
+                      onPressed: () {
+                        if (selectedValue != 'Add Page') {}
+                      },
+                    ),
+                  ),
+                SizedBox(
+                  width: 34,
+                ),
+                TextEditingButtons(selectedValue: selectedValue)
+              ],
+            ),
           ),
           MyListView()
         ],
       ),
     ));
+  }
+}
+
+class TextEditingButtons extends StatelessWidget {
+  const TextEditingButtons({
+    Key? key,
+    required this.selectedValue,
+  }) : super(key: key);
+
+  final String selectedValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return Ink(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black, width: 1),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Container(
+        child: Row(
+          children: [
+            CostumInk(
+              selectedValue: selectedValue,
+              iconPath: 'assets/title-button.png',
+            ),
+            CostumInk(
+              selectedValue: selectedValue,
+              iconPath: 'assets/small-box-button.png',
+            ),
+            CostumInk(
+              selectedValue: selectedValue,
+              iconPath: 'assets/tag-sort-button.png',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CostumInk extends StatelessWidget {
+  const CostumInk({
+    Key? key,
+    required this.selectedValue,
+    required this.iconPath,
+  }) : super(key: key);
+
+  final String selectedValue;
+  final String iconPath;
+
+  @override
+  Widget build(BuildContext context) {
+    return Ink(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black, width: 2),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      height: 45,
+      width: 45,
+      child: TextButton(
+        style: TextButton.styleFrom(backgroundColor: BUTTON_COLOR),
+        child: Image.asset(iconPath),
+        onPressed: () {
+          if (selectedValue != 'Add Page') {}
+        },
+      ),
+    );
   }
 }

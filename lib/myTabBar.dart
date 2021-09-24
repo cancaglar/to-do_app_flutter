@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todoapp/constants.dart';
 
 class MyTabBar extends StatelessWidget {
   const MyTabBar({
@@ -37,8 +38,9 @@ class TabBarButtons extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10)),
             child: Container(
               height: 65,
-              child: IconButton(
-                icon: Image.asset(
+              child: TextButton(
+                style: TextButton.styleFrom(backgroundColor: BUTTON_COLOR),
+                child: Image.asset(
                   iconUrl,
                 ),
                 onPressed: () {},
