@@ -9,6 +9,7 @@ class MyListView extends StatefulWidget {
   @override
   _MyListViewState createState() => _MyListViewState();
 }
+//  THIS PAGE IS FOR NOTE LISTING
 
 class _MyListViewState extends State<MyListView> {
   bool isListEmpty = true;

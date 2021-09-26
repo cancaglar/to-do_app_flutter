@@ -1,21 +1,12 @@
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todoapp/notePage.dart';
 
 class AddPagePopUp extends StatelessWidget {
   final myController = TextEditingController();
-
-  // Future _save(page, String key) async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   var random = Random();
-  //   await prefs.setStringList('key${random.nextInt(9999)}', page);
-
-  // }
 
   @override
   Widget build(BuildContext context) {

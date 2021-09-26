@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+//import 'package:todoapp/addNotePage.dart';
 import 'package:todoapp/addPagePopUp.dart';
 import 'package:todoapp/toDoPage.dart';
 import 'package:todoapp/constants.dart';
@@ -23,7 +24,8 @@ class HomePage extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/todopage': (context) => TodoPage(),
-        '/addpage': (context) => AddPagePopUp()
+        '/addpage': (context) => AddPagePopUp(),
+        //'/addNote': (context) => AddNotePage(),
       },
     );
   }

@@ -1,12 +1,13 @@
 class Note {
-  final int? id;
+  final String parentPage;
+  final String title;
   final String note;
-  final DateTime createdTime;
-  final int pageId;
+  final String createdTime;
 
-  const Note(
-      {this.id,
-      required this.note,
-      required this.createdTime,
-      required this.pageId});
+  const Note({
+    required this.parentPage,
+    required this.title,
+    required this.note,
+    required this.createdTime,
+  });
 }

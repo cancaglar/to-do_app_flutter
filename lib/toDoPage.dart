@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:todoapp/addNotePage.dart';
 
 import 'package:todoapp/myTabBar.dart';
 import 'package:todoapp/constants.dart';
@@ -111,7 +112,7 @@ class _TodoPageState extends State<TodoPage> {
                                 )
                                 .then((value) => () {
                                       setState(() {
-                                        print('asd');
+                                        print('');
                                       });
                                     });
                           } else {
@@ -141,14 +142,23 @@ class _TodoPageState extends State<TodoPage> {
                     child: TextButton(
                       child: Image.asset('assets/plus-button.png'),
                       onPressed: () {
-                        if (selectedValue != 'Add Page') {}
+                        if (selectedValue != 'Add Page') {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  AddNotePage(selectedPage: selectedValue),
+                            ),
+                          );
+                        }
                       },
                     ),
                   ),
                 SizedBox(
                   width: 34,
                 ),
-                TextEditingButtons(selectedValue: selectedValue)
+                if (addButtonVisibile)
+                  TextEditingButtons(selectedValue: selectedValue)
               ],
             ),
           ),
