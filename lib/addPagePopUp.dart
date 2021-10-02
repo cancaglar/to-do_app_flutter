@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 
-import 'package:todoapp/notePage.dart';
+import 'package:todoapp/models/notePage.dart';
 
 class AddPagePopUp extends StatelessWidget {
   final myController = TextEditingController();

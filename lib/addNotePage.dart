@@ -1,10 +1,16 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:todoapp/note.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:todoapp/models/note.dart';
 
 class AddNotePage extends StatefulWidget {
-  const AddNotePage({Key? key, required this.selectedPage}) : super(key: key);
+  AddNotePage({Key? key, required this.selectedPage, this.title, this.note})
+      : super(key: key);
 
   final String selectedPage;
+  String? title = '';
+  String? note = '';
 
   @override
   State<AddNotePage> createState() => _AddNotePageState();
@@ -17,8 +23,15 @@ class _AddNotePageState extends State<AddNotePage> {
   Color boldColor = Colors.black;
   Color italicColor = Colors.black;
 
-  final titleController = TextEditingController();
-  final noteController = TextEditingController();
+  var titleController = TextEditingController();
+  var noteController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+
+    titleController.text = widget.title!;
+    noteController.text = widget.note!;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +72,8 @@ class _AddNotePageState extends State<AddNotePage> {
                                           color: Colors.black, width: 1)),
                                       borderRadius: BorderRadius.circular(10)),
                                   child: Expanded(
-                                    child: TextField(
+                                    child: TextFormField(
+                                      //initialValue: titleController.text,
                                       controller: titleController,
                                       decoration: InputDecoration(
                                           border: InputBorder.none),
@@ -70,51 +84,6 @@ class _AddNotePageState extends State<AddNotePage> {
                             ],
                           ),
                         ),
-                        // Container(
-                        //   margin: EdgeInsets.only(left: 10),
-                        //   child: Row(
-                        //     children: [
-                        //       TextButton(
-                        //         style: TextButton.styleFrom(
-                        //           primary: Colors.black,
-                        //         ),
-                        //         child: Icon(
-                        //           Icons.format_bold,
-                        //           color: boldColor,
-                        //         ),
-                        //         onPressed: () {
-                        //           isBold = !isBold;
-                        //           setState(() {
-                        //             if (isBold) {
-                        //               boldColor = Colors.blueAccent;
-                        //             } else {
-                        //               boldColor = Colors.black;
-                        //             }
-                        //           });
-                        //         },
-                        //       ),
-                        //       TextButton(
-                        //         style: TextButton.styleFrom(
-                        //           primary: Colors.black,
-                        //         ),
-                        //         child: Icon(
-                        //           Icons.format_italic,
-                        //           color: italicColor,
-                        //         ),
-                        //         onPressed: () {
-                        //           isItalic = !isItalic;
-                        //           setState(() {
-                        //             if (isItalic) {
-                        //               italicColor = Colors.blueAccent;
-                        //             } else {
-                        //               italicColor = Colors.black;
-                        //             }
-                        //           });
-                        //         },
-                        //       )
-                        //     ],
-                        //   ),
-                        // ),
                         Divider(
                           color: Colors.black,
                         ),
@@ -123,15 +92,16 @@ class _AddNotePageState extends State<AddNotePage> {
                           alignment: Alignment.centerLeft,
                           child: Text('Note :'),
                         ),
-
                         Expanded(
                           child: Container(
                             padding: EdgeInsets.all(10),
-                            child: TextField(
+                            child: TextFormField(
+                              //initialValue: noteController.text,
                               maxLines: null,
                               keyboardType: TextInputType.multiline,
                               controller: noteController,
                               showCursor: true,
+                              scrollController: ScrollController(),
                             ),
                           ),
                         ),
@@ -167,6 +137,7 @@ class _AddNotePageState extends State<AddNotePage> {
                               child: TextButton(
                                   onPressed: () {
                                     Note note = new Note(
+                                      type: 'note',
                                       parentPage: widget.selectedPage,
                                       title: titleController.text,
                                       note: noteController.text,
@@ -174,12 +145,12 @@ class _AddNotePageState extends State<AddNotePage> {
                                           DateTime.now().toIso8601String(),
                                     );
 
-                                    print('''
-                                      Parent Page : ${note.parentPage}
-                                      Title : ${note.title}
-                                      Note : ${note.note}
-                                      Created Time : ${note.createdTime}
-                                      ''');
+                                    var random = Random();
+                                    GetStorage().write(
+                                        'note ${random.nextInt(999)}',
+                                        '${note.type}-${note.parentPage}-${note.title}-${note.note}-${note.createdTime}');
+
+                                    Navigator.pop(context);
                                   },
                                   child: Text(
                                     'Okay',

@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todoapp/addNotePage.dart';
-
 import 'package:todoapp/myTabBar.dart';
 import 'package:todoapp/constants.dart';
-import 'package:todoapp/notePage.dart';
-
+import 'package:todoapp/models/notePage.dart';
 import 'addPagePopUp.dart';
 import 'myListView.dart';
 
@@ -19,7 +15,7 @@ class TodoPage extends StatefulWidget {
 }
 
 class _TodoPageState extends State<TodoPage> {
-  late String selectedValue = '';
+  String? selectedValue;
   List<String> dropDownItemValue = [];
   List<NotePages> notePages = [];
   final List<NotePages> pages = [];
@@ -56,7 +52,29 @@ class _TodoPageState extends State<TodoPage> {
     dropDownItemValue.add('Add Page');
     print(dropDownItemValue);
     // selected value must be contain at dropDownItemValue
-    selectedValue = dropDownItemValue[0];
+  }
+
+  final List<NoteWidget> notes = <NoteWidget>[];
+  void getAllNotes(String parentPage) {
+    setState(() {
+      notes.clear();
+      var keys = GetStorage().getKeys();
+      for (var key in keys) {
+        var noteString = GetStorage().read(key);
+
+        List<String> noteList = noteString.split('-');
+
+        if (noteList[0] == 'note' && noteList[1] == parentPage) {
+          NoteWidget note = NoteWidget(
+              title: noteList[2],
+              note: noteList[3],
+              parentPage: noteList[1],
+              name: key);
+          print(noteList[1]);
+          notes.add(note);
+        }
+      }
+    });
   }
 
   @override
@@ -66,6 +84,9 @@ class _TodoPageState extends State<TodoPage> {
     // GetStorage().erase();
 
     getListDataFromStorage();
+    selectedValue = dropDownItemValue[0];
+
+    getAllNotes(selectedValue!);
   }
 
   @override
@@ -90,37 +111,36 @@ class _TodoPageState extends State<TodoPage> {
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
-                      value: selectedValue,
+                      style: TextStyle(
+                          fontFamily: 'OpenSans',
+                          fontSize: 20,
+                          color: Colors.black),
                       isExpanded: true,
                       icon: Image.asset('assets/down-list-arrow.png'),
                       iconSize: 10,
                       elevation: 16,
                       onChanged: (newValue) {
                         //print(newValue);
+                        selectedValue = newValue!;
+                        print(selectedValue);
                         setState(() {
-                          selectedValue = newValue!;
-
                           if (selectedValue == 'Add Page') {
                             addButtonVisibile = false;
-                            Navigator.of(context)
-                                .push(
-                                  new MaterialPageRoute(
-                                    //opaque: false,
+                            Navigator.of(context).push(
+                              new MaterialPageRoute(
+                                //opaque: false,
 
-                                    builder: (context) => AddPagePopUp(),
-                                  ),
-                                )
-                                .then((value) => () {
-                                      setState(() {
-                                        print('');
-                                      });
-                                    });
+                                builder: (context) => AddPagePopUp(),
+                              ),
+                            );
                           } else {
                             addButtonVisibile = true;
                           }
                           getListDataFromStorage();
+                          getAllNotes(selectedValue!);
                         });
                       },
+                      value: selectedValue,
                       items: List.generate(
                         dropDownItemValue.length,
                         (index) => DropdownMenuItem(
@@ -146,8 +166,11 @@ class _TodoPageState extends State<TodoPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  AddNotePage(selectedPage: selectedValue),
+                              builder: (context) => AddNotePage(
+                                selectedPage: selectedValue!,
+                                note: '',
+                                title: '',
+                              ),
                             ),
                           );
                         }
@@ -158,11 +181,14 @@ class _TodoPageState extends State<TodoPage> {
                   width: 34,
                 ),
                 if (addButtonVisibile)
-                  TextEditingButtons(selectedValue: selectedValue)
+                  TextEditingButtons(selectedValue: selectedValue!)
               ],
             ),
           ),
-          MyListView()
+          MyListView(
+            noteList: notes,
+            parentPage: selectedValue!,
+          ),
         ],
       ),
     ));
