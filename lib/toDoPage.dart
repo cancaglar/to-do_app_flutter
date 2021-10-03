@@ -70,7 +70,7 @@ class _TodoPageState extends State<TodoPage> {
               note: noteList[3],
               parentPage: noteList[1],
               name: key);
-          print(noteList[1]);
+          print(key);
           notes.add(note);
         }
       }

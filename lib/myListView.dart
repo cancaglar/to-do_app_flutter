@@ -163,6 +163,7 @@ class _NoteWidgetState extends State<NoteWidget> {
                   selectedPage: widget.parentPage,
                   title: widget.title,
                   note: widget.note,
+                  noteKey: widget.name,
                 ),
               ),
             );

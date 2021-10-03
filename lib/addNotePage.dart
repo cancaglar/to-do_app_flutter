@@ -5,12 +5,18 @@ import 'package:get_storage/get_storage.dart';
 import 'package:todoapp/models/note.dart';
 
 class AddNotePage extends StatefulWidget {
-  AddNotePage({Key? key, required this.selectedPage, this.title, this.note})
+  AddNotePage(
+      {Key? key,
+      required this.selectedPage,
+      this.title,
+      this.note,
+      this.noteKey})
       : super(key: key);
 
   final String selectedPage;
   String? title = '';
   String? note = '';
+  String? noteKey = '';
 
   @override
   State<AddNotePage> createState() => _AddNotePageState();
@@ -144,11 +150,15 @@ class _AddNotePageState extends State<AddNotePage> {
                                       createdTime:
                                           DateTime.now().toIso8601String(),
                                     );
-
-                                    var random = Random();
-                                    GetStorage().write(
-                                        'note ${random.nextInt(999)}',
-                                        '${note.type}-${note.parentPage}-${note.title}-${note.note}-${note.createdTime}');
+                                    if (widget.noteKey == '') {
+                                      var random = Random();
+                                      GetStorage().write(
+                                          'note ${random.nextInt(999)}',
+                                          '${note.type}-${note.parentPage}-${note.title}-${note.note}-${note.createdTime}');
+                                    } else {
+                                      GetStorage().write(widget.noteKey!,
+                                          '${note.type}-${note.parentPage}-${note.title}-${note.note}-${note.createdTime}');
+                                    }
 
                                     Navigator.pop(context);
                                   },
