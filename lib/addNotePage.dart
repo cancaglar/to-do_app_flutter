@@ -150,7 +150,8 @@ class _AddNotePageState extends State<AddNotePage> {
                                       createdTime:
                                           DateTime.now().toIso8601String(),
                                     );
-                                    if (widget.noteKey == '') {
+                                    if (widget.noteKey == '' ||
+                                        widget.noteKey == null) {
                                       var random = Random();
                                       GetStorage().write(
                                           'note ${random.nextInt(999)}',

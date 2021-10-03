@@ -147,7 +147,7 @@ class _NoteWidgetState extends State<NoteWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 7),
+      margin: EdgeInsets.only(top: 7, left: 3, right: 3),
       height: 180,
       child: Ink(
         decoration: BoxDecoration(

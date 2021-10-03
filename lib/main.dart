@@ -16,6 +16,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       color: APP_DEFAULT_COLOR,
       home: Scaffold(
         backgroundColor: APP_DEFAULT_COLOR,
